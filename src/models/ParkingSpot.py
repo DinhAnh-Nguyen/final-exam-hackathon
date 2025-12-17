@@ -1,6 +1,6 @@
 class ParkingSpot:
-    def __init__(self, spot_id, size, available=True, isHandicapped=False):
-        self.spot_id = spot_id
+    def __init__(self, id, size, available=True, isHandicapped=False):
+        self.id = id
         self.size = size
         self.available = available
         self.isHandicapped = isHandicapped

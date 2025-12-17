@@ -1,18 +1,29 @@
-class ParkingLot:
-    def __init__(self, id, spotNumber, handicappedSpots, availableSpots):
-        self.id = id
-        self.spotNumber = spotNumber
-        self.availableSpots = availableSpots
-        self.handicappedSpots = handicappedSpots
+from models.ParkingSpot import ParkingSpot
 
+class ParkingLot:
+    def __init__(self, id, maxSpots, handicappedSpots):
+        self.id = id
+        self.maxSpots = maxSpots
+        self.handicappedSpots = handicappedSpots
+        self.spots = []
+        
+        for i in range(1, maxSpots + 1):
+            isHandicapped = i <= handicappedSpots
+            spot = ParkingSpot(id=i, size="standard", isHandicapped=isHandicapped)
+            self.spots.append(spot)
+    
+    @property
+    def available_spots(self):
+        return sum(1 for spot in self.spots if spot.available)
+    
     def park_car(self):
-        if self.availableSpots > 0:
-            self.availableSpots -= 1
-            print("Car parked successfully.")
-            return True
-        else:
-            print("No available spots.")
-            return False
+        for spot in self.spots:
+            if spot.available:
+                spot.park_vehicle()
+                print("Car parked successfully.")
+                return True
+        print("No available spots.")
+        return False
 
     def remove_car(self):
         if self.availableSpots < self.spotNumber:
@@ -21,21 +32,5 @@ class ParkingLot:
             return True
         else:
             return False
-
-    def available_spots(self):
-        return self.availableSpots
-    
-    def set_handicapped_spots(self, number):
-        self.handicappedSpots = number
-    
-    def get_handicapped_spots(self):
-        return self.handicappedSpots
-    def get_total_spots(self):
-        return self.spotNumber
-    def get_id(self):
-        return self.id
-  
-    def get_available_spots(self):
-        return self.availableSpots
     
 
