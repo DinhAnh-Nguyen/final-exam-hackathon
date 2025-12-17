@@ -1,0 +1,55 @@
+{
+	"lot": {
+		"id": "Lot-A",
+		"spotNumber": 10,
+		"handicappedSpots": 2,
+		"availableSpots": 8
+	},
+	"parkingSpots": [
+		{
+			"id": "P1",
+			"size": "compact",
+			"available": true,
+			"isHandicapped": false
+		},
+		{
+			"id": "P2",
+			"size": "large",
+			"available": true,
+			"isHandicapped": true
+		}
+	],
+	"vehicles": [
+		{
+			"plate": "CXP2494",
+			"size": "compact",
+			"handicapped": false
+		},
+		{
+			"plate": "XYZ789",
+			"size": "large",
+			"handicapped": true
+		}
+	],
+	"users": [
+		{
+			"id": 1,
+			"name": "Mark Bui",
+			"vehiclePlate": "CXP2494",
+			"handicapped": false
+		},
+		{
+			"id": 2,
+			"name": "Jack Daniel",
+			"vehiclePlate": "CPX4321",
+			"handicapped": true
+		}
+	],
+	"assignments": [
+		{
+			"vehiclePlate": "CXP2494",
+			"spotId": "P1",
+			"userId": 1
+		}
+	]
+}
