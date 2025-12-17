@@ -117,6 +117,12 @@ def main():
                     parkingLot.park_car()
                     print(f"Parking Lot Assigned for {userName}, License Plate: {licensePlate}, Vehicle Type: {vehicleType}")
                     print(f"Updated Available Spots in Lot {parkingLot.id}: {parkingLot.available_spots}")
+                    licensePlate = input("Enter your license plate number: ").strip()
+                    vehicleType = input("Enter your vehicle size (compact/standard/large): ").strip()
+
+                    parkingLot.park_car()
+                    print(f"Parking Lot Assigned for {userName}, License Plate: {licensePlate}, Vehicle Type: {vehicleType}")
+                    print(f"Updated Available Spots in Lot {parkingLot.id}: {parkingLot.available_spots}")
                 except (KeyboardInterrupt, EOFError):
                     print("\nOperation cancelled. Returning to main menu.")
                     continue
