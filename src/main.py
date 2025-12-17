@@ -24,8 +24,28 @@ def view_registration(state):
     print(f"Spot Type: {'Handicapped' if spot.is_handicapped_spot() else 'Standard'}")
 
 
+def release_parking_spot(state):
+    plate = input("Enter the vehicle license plate to release: ").strip().upper()
+    registration = state["assignments"].get(plate)
+    if not registration:
+        print(f"No active assignment found for license plate {plate}.")
+        return
+
+    spot = registration["spot"]
+    lot = state["lot"]
+    was_released = spot.remove_vehicle()
+    if was_released:
+        current_available = lot.get_available_spots()
+        lot.availableSpots = min(lot.get_total_spots(), current_available + 1)
+    else:
+        print(f"Spot {spot.get_spot_id()} was already available.")
+
+    del state["assignments"][plate]
+    print(f"Released spot {spot.get_spot_id()} for vehicle {plate}.")
+
+
 def main():
-    state = build_sample_state("parkingSpot.json")
+    state = build_sample_state()
     while True:
         print("---------Parking Lot Management System---------")
         print("1. Assign Parking Lot")
@@ -40,7 +60,7 @@ def main():
             case "2":
                 view_registration(state)
             case "3":
-                print("Releasing Parking Lot...")
+                release_parking_spot(state)
             case "4":
                 print("Exiting the system. Goodbye!")
                 break
