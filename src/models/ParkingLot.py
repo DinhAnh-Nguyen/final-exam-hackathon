@@ -16,14 +16,23 @@ class ParkingLot:
     def available_spots(self):
         return sum(1 for spot in self.spots if spot.available)
     
-    def park_car(self):
+    def park_car(self, user=None, is_handicapped=False):
+        if is_handicapped:
+            for spot in self.spots:
+                if spot.available and spot.is_handicapped_spot():
+                    spot.park_vehicle()
+                    print(f"Car parked successfully in handicapped spot {spot.id}.")
+                    return spot
+            print("No available handicapped spots. Trying regular spots...")
+        
         for spot in self.spots:
-            if spot.available:
+            if spot.available and not spot.is_handicapped_spot():
                 spot.park_vehicle()
-                print("Car parked successfully.")
-                return True
+                print(f"Car parked successfully in spot {spot.id}.")
+                return spot
+        
         print("No available spots.")
-        return False
+        return None
 
     def remove_car(self):
         if self.availableSpots < self.spotNumber:

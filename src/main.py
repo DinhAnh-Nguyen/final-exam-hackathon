@@ -1,6 +1,5 @@
-# from models.ParkingLot import ParkingLot
-# from models.Vehicle import Vehicle
-# from models.User import User
+from models.Vehicle import Vehicle
+from models.User import User
 from models.ParkingLot import ParkingLot
 from data_loader import build_sample_state
 
@@ -80,12 +79,45 @@ def main():
                             continue
 
                     userName = input("Enter your name: ").strip()
-                    licensePlate = input("Enter your license plate number: ").strip()
-                    vehicleType = input("Enter your vehicle size (compact/standard/large): ").strip()
+                    licensePlate = input("Enter your license plate number: ").strip().upper()
+                    vehicleType = input("Enter your vehicle size (compact/standard/large): ").strip().lower()
+                    handicappedInput = input("Do you require a handicapped spot? (yes/no): ").strip().lower()
+                    isHandicapped = (handicappedInput == 'yes')
 
-                    parkingLot.park_car()
-                    print(f"Parking Lot Assigned for {userName}, License Plate: {licensePlate}, Vehicle Type: {vehicleType}")
-                    print(f"Updated Available Spots in Lot {parkingLot.id}: {parkingLot.available_spots}")
+                    if licensePlate in state["assignments"]:
+                        print(f"Vehicle {licensePlate} already has an assigned spot.")
+                        continue
+
+                    
+                    
+                    if licensePlate not in state["vehicles"]:
+                        vehicle = Vehicle(licensePlate, vehicleType)
+                        vehicle.set_handicapped(isHandicapped)
+                        state["vehicles"][licensePlate] = vehicle
+                    else:
+                        vehicle = state["vehicles"][licensePlate]
+                    
+                    user_id = len(state["users"]) + 1
+                    user = User(user_id, userName, vehicle)
+                    user.set_handicapped(isHandicapped)
+                    state["users"][user_id] = user
+
+                    assigned_spot = parkingLot.park_car(user=user, is_handicapped=isHandicapped)
+                    
+                    if assigned_spot:
+                        state["assignments"][licensePlate] = {
+                            "user": user,
+                            "spot": assigned_spot,
+                            "lot": parkingLot
+                        }
+                        print(f"\nParking Lot Assigned for {userName}")
+                        print(f"License Plate: {licensePlate}")
+                        print(f"Vehicle Type: {vehicleType}")
+                        print(f"Handicapped: {'Yes' if isHandicapped else 'No'}")
+                        print(f"Spot: {assigned_spot.id} ({'Handicapped' if assigned_spot.is_handicapped_spot() else 'Standard'})")
+                        print(f"Updated Available Spots in Lot {parkingLot.id}: {parkingLot.available_spots}")
+                    else:
+                        print(f"Could not assign a parking spot. Lot is full.")
                 except (KeyboardInterrupt, EOFError):
                     print("\nOperation cancelled. Returning to main menu.")
                     continue
