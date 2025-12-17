@@ -16,3 +16,13 @@ class ParkingSpot:
             self.available = True
             return True
         return False
+    def is_available(self):
+        return self.available
+    def get_spot_id(self):
+        return self.spot_id
+    def get_size(self):
+        return self.size    
+    def is_handicapped_spot(self):
+        return self.isHandicapped
+    def set_handicapped_spot(self, isHandicapped):
+        self.isHandicapped = isHandicapped
