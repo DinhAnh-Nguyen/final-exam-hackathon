@@ -1,18 +1,17 @@
 from typing import Any, Dict
 
 from models.ParkingLot import ParkingLot
-from models.ParkingSpot import ParkingSpot
 from models.User import User
 from models.Vehicle import Vehicle
 
 
 def build_sample_state() -> Dict[str, Any]:
-    lot = ParkingLot(spotNumber=10, id="Lot-A", handicappedSpots=2, availableSpots=8)
+    lot = ParkingLot(id="Lot-A", maxSpots=10, handicappedSpots=2)
 
-    spots = {
-        "P1": ParkingSpot("P1", "compact", available=False),
-        "P2": ParkingSpot("P2", "large", available=True, isHandicapped=True),
-    }
+    occupied_spot = lot.spots[0]
+    occupied_spot.park_vehicle()
+
+    spots = {spot.id: spot for spot in lot.spots}
 
     vehicles = {
         "ABC123": Vehicle("ABC123", "compact"),
@@ -27,9 +26,8 @@ def build_sample_state() -> Dict[str, Any]:
     users[2].set_handicapped(True)
 
     assignments = {
-        "ABC123": {"user": users[1], "spot": spots["P1"], "lot": lot}
+        "ABC123": {"user": users[1], "spot": occupied_spot, "lot": lot}
     }
-    lot.park_car()
 
     return {
         "lot": lot,

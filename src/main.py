@@ -22,9 +22,7 @@ def view_registration(state):
     print(f"Name: {user.get_name()}")
     print(f"Vehicle: {vehicle.get_license_plate()} ({vehicle.get_vehicle_type()})")
     print(f"Handicapped: {'Yes' if user.get_is_handicapped() else 'No'}")
-    print(
-        f"Assigned Lot: {lot.get_id()} - Spot: {spot.get_spot_id()} ({spot.get_size()})"
-    )
+    print(f"Assigned Lot: {lot.id} - Spot: {spot.id} ({spot.size})")
     print(f"Spot Type: {'Handicapped' if spot.is_handicapped_spot() else 'Standard'}")
 
 
@@ -37,15 +35,13 @@ def release_parking_spot(state):
 
     spot = registration["spot"]
     lot = state["lot"]
-    was_released = spot.remove_vehicle()
-    if was_released:
-        current_available = lot.get_available_spots()
-        lot.availableSpots = min(lot.get_total_spots(), current_available + 1)
+    if spot.remove_vehicle():
+        print(f"Released spot {spot.id} for vehicle {plate}.")
+        print(f"Updated available spots in lot {lot.id}: {lot.available_spots}")
     else:
-        print(f"Spot {spot.get_spot_id()} was already available.")
+        print(f"Spot {spot.id} was already available.")
 
     del state["assignments"][plate]
-    print(f"Released spot {spot.get_spot_id()} for vehicle {plate}.")
 
 
 def main():
@@ -94,9 +90,9 @@ def main():
                     print("\nOperation cancelled. Returning to main menu.")
                     continue
             case '2':
-                print("Viewing Your Registration...")
+                view_registration(state)
             case '3':
-                print("Releasing Parking Lot...")
+                release_parking_spot(state)
             case '4':
                 print("Exiting the system. Goodbye!")
                 break

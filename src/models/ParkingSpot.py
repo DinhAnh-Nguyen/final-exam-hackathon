@@ -19,7 +19,7 @@ class ParkingSpot:
     def is_available(self):
         return self.available
     def get_spot_id(self):
-        return self.spot_id
+        return self.id
     def get_size(self):
         return self.size    
     def is_handicapped_spot(self):
